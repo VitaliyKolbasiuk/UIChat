@@ -21,11 +21,16 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_SendMessage_clicked();
 
     void on_Join_released();
 
     void on_SaveSettings_released();
+
+    void on_SendMessage_released();
+
+    void on_Exit_released();
+
+    void on_m_CreateRoom_released();
 
 private:
     Ui::MainWindow *ui;
@@ -33,5 +38,7 @@ private:
     std::shared_ptr<QChatClient> m_chatClient;
     io_context m_ioContext1;
     std::shared_ptr<TcpClient>  m_tcpClient;
+
+    void configureUI();
 };
 #endif // MAINWINDOW_H

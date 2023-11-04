@@ -19,13 +19,17 @@ public:
 signals:
     void OnMessageReceived(QString username, QString message);
 
+    void OnTableChanged(QString username);
+
 private:
     std::weak_ptr<TcpClient>  m_tcpClient;
     std::string m_chatClientName;
     std::string m_chatRoomName;
 
 public:
-    QChatClient() {}
+    QChatClient() {
+
+    }
 
     void setTcpClient(std::weak_ptr<TcpClient> tcpClient)
     {
@@ -58,14 +62,18 @@ public:
 
             if (username != m_chatClientName)
             {
-                emit OnMessageReceived(QString::fromStdString(username), QString::fromStdString(message));
-                //std::cout << '[' << username << "]: " << message << std::endl;
+                emit OnMessageReceived(QString::fromStdString("<HTML> <font color=\"yellow\">" + username + " </font>" ), QString::fromStdString(message));
             }
             else
             {
-                emit OnMessageReceived(QString::fromStdString(username + "!"), QString::fromStdString(message));
-                //std::cout << "-->[" << username << "]: " << message << std::endl;
+                emit OnMessageReceived(QString::fromStdString("<HTML> <font color=\"green\">" + username + ": </font>"), QString::fromStdString(message));
             }
+        }
+        else if (command == UPDATE_THE_USER_TABLE_CMD)
+        {
+            std::string username;
+            std::getline(input, username, ';');
+            emit OnTableChanged(QString::fromStdString(username));
         }
     }
     virtual bool sendUserMessage(const std::string& message) override
