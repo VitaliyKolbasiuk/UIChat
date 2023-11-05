@@ -15,7 +15,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 include_directories(SYSTEM cereal/include)
 
 #add_subdirectory(ed25519)
-#include_directories(SYSTEM ed25519/src)
+include_directories(SYSTEM ed25519/src)
 
 if (APPLE)
     add_definitions(-DBOOST_ASIO_HAS_STD_INVOKE_RESULT)
@@ -51,7 +51,17 @@ set(PROJECT_SOURCES
 	Client/ClientInterfaces.h
 	Client/TcpClient.h
 	Client/Terminal.h
-	#BoostClientServer/Chat.h
+	Client/Protocol.h
+	ed25519/src/add_scalar.cpp
+	ed25519/src/fe.cpp
+	ed25519/src/ge.cpp
+	ed25519/src/key_exchange.cpp
+	ed25519/src/keypair.cpp
+	ed25519/src/sc.cpp
+	ed25519/src/seed.cpp
+	ed25519/src/sha512.cpp
+	ed25519/src/sign.cpp
+	ed25519/src/verify.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -85,7 +95,7 @@ target_link_libraries(UIChat PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Chat)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Chat ed25519/lib)
 endif()
 set_target_properties(UIChat PROPERTIES
     ${BUNDLE_ID_OPTION}

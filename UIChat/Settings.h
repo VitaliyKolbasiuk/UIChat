@@ -3,13 +3,23 @@
 #include <cereal/types/string.hpp>
 #include <array>
 
+struct KeyPair{
+    std::array<uint8_t, 64> m_privateKey;
+    std::array<uint8_t, 32> m_publicKey;
+
+    template <class Archive>
+    void serialize( Archive & ar )
+    {
+        ar( m_privateKey, m_publicKey );
+    }
+};
+
 class Settings{
     std::string m_historyFileName;
 
 public:
     int m_version = 0;
-    std::array<uint8_t, 32> m_userKey;      // private key
-    std::array<uint8_t, 32> m_userPublicKey;
+    KeyPair m_keyPair;
     std::array<uint8_t, 32> m_deviceKey;
     std::string m_username;
 
@@ -23,7 +33,7 @@ public:
     void serialize( Archive & ar )
     {
         ar( m_version );
-        ar( m_userKey, m_deviceKey );
+        ar( m_deviceKey );
         ar( m_username, m_historyFileName );
     }
 };
